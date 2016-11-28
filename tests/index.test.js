@@ -6,6 +6,11 @@ import spies from 'chai-spies';
 import {FormStore} from '../src/index';
 import {noop} from '../src/utils/helpers';
 import {progressEnum} from '../src/utils/progressEnum';
+import {
+  missingSubmitAction,
+  notPromiseSubmitAction,
+  notArrayActionErrors
+} from '../src/utils/messages';
 
 chai.use(spies);
 
@@ -277,6 +282,34 @@ describe('FormStore', function() {
     expect(store.progress).to.equal(progressEnum.NONE);
     return store.submit().then(() => {
       expect(store.progress).to.equal(progressEnum.ERROR);
+    });
+  });
+
+  it('should handle undefined submitAction', () => {
+    const store = new FormStore();
+
+    return store.submit().catch((e) => {
+      expect(e).to.equal(missingSubmitAction);
+    });
+  });
+
+  it('should handle non promise submitAction', () => {
+    const store = new FormStore({
+      submitAction: noop
+    });
+
+    return store.submit().catch((e) => {
+      expect(e).to.equal(notPromiseSubmitAction);
+    });
+  });
+
+  it('should handle wrong error format', () => {
+    const store = new FormStore({
+      submitAction: () => Promise.reject({error: true})
+    });
+
+    return store.submit().catch((e) => {
+      expect(e).to.equal(notArrayActionErrors);
     });
   });
 });
