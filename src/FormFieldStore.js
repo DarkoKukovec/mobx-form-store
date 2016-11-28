@@ -43,7 +43,7 @@ export class FormFieldStore {
    * @returns {Boolean} If there are no errors
    */
   @computed get valid() {
-    return this.errors.length <= 0 && this._actionErrors.length <= 0;
+    return this.errors.length <= 0;
   }
 
   /**
