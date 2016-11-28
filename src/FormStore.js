@@ -21,11 +21,11 @@ export class FormStore {
    * Creates an instance of FormStore with an initial state
    *
    * @constructor
-   * @param {Function} [submitAction=noop] - Method to be called when submitting the form
-   * @param {Object} [validators={}] - Validators for form fields
-   * @param {Object} [fields={}] - Fields for the from
-   * @param {Object} [response=null] - Response for intial state
-   * @param {Object[]} [actionErrors=[]] - Action errors for intial state
+   * @param {Function} [opt.submitAction=noop] - Method to be called when submitting the form
+   * @param {Object} [opt.validators={}] - Validators for form fields
+   * @param {Object} [opt.fields={}] - Fields for the from
+   * @param {Object} [opt.response=null] - Response for intial state
+   * @param {Object[]} [opt.actionErrors=[]] - Action errors for intial state
    */
   constructor({submitAction = noop, validators = {}, fields = {}, response = null, actionErrors = []} = {}) {
     this.submitAction = submitAction;

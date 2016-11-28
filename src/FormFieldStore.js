@@ -14,12 +14,12 @@ export class FormFieldStore {
    * Creates an instance of FormFieldStore with an initial state
    *
    * @constructor
-   * @param {Object} name - Name of the form field
-   * @param {Object} value - Value of the field
-   * @param {Object} initialValue - Initial value of the field (used for serialization)
-   * @param {Object} actionErrors - Action errors (used for serialization)
-   * @param {Object} validators - Active validators and options
-   * @param {Object} validatorFunctions - All available validators
+   * @param {Object} opt.name - Name of the form field
+   * @param {Object} opt.value - Value of the field
+   * @param {Object} [opt.initialValue=opt.value] - Initial value of the field (used for serialization)
+   * @param {Object} opt.actionErrors - Action errors (used for serialization)
+   * @param {Object} opt.validators - Active validators and options
+   * @param {Object} opt.validatorFunctions - All available validators
    */
   constructor({name, value, initialValue = value, actionErrors, validators, validatorFunctions}) {
     this._validatorFunctions = validatorFunctions;
