@@ -7,7 +7,10 @@ export default class ObservableStore {
    * @param {stores} stores - Application store
    * @return {undefined}
    */
-  constructor(initialState, stores) {
+  constructor(initialState) {
+    this.storeWillInitialize(initialState);
+    this._initData(initialState);
+    this.storeDidInitialize();
   }
 
   /**
@@ -17,6 +20,7 @@ export default class ObservableStore {
    * @return {undefined}
    */
   storeWillInitialize(/* stores */) {
+    return;
   }
 
   /**
@@ -26,5 +30,6 @@ export default class ObservableStore {
    * @return {undefined}
    */
   storeDidInitialize(/* stores */) {
+    return;
   }
 }

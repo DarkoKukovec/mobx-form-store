@@ -1,9 +1,12 @@
+export const EMAIL = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
 /**
  * Check if the field has a value
  *
  * @return {Boolean} Field has a value set
  */
 export function required() {
+  return (field) => Boolean(field.value) || field.value === 0;
 }
 
 /**
@@ -13,6 +16,7 @@ export function required() {
  * @return {Boolean} Field value has a minimal length
  */
 export function minLength(length) {
+  return (field) => field.value.length >= length || !field.value.length;
 }
 
 /**
@@ -22,6 +26,7 @@ export function minLength(length) {
  * @return {Boolean} Field value has a maximal length
  */
 export function maxLength(length) {
+  return (field) => field.value.length <= length;
 }
 
 /**
@@ -30,6 +35,7 @@ export function maxLength(length) {
  * @return {Boolean} Field value is a valid email
  */
 export function email() {
+  return (field) => !field.value || EMAIL.test(field.value);
 }
 
 /**
@@ -39,4 +45,5 @@ export function email() {
  * @return {Boolean} Field value matches the fieldName field value
  */
 export function equals(fieldName) {
+  return (field) => field.value === self[fieldName].value;
 }
