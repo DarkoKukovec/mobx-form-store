@@ -3,10 +3,14 @@
 import {action, computed, extendObservable, runInAction, toJS} from 'mobx';
 
 import {FormFieldStore} from './FormFieldStore';
-import * as messages from './utils/messages';
 import {progressEnum} from './utils/progressEnum';
-import {noop, mapValues} from './utils/helpers';
+import {mapValues} from './utils/helpers';
 import {required, minLength, maxLength, email, equals} from './utils/validators.js';
+import {
+  missingSubmitAction,
+  notPromiseSubmitAction,
+  notArrayActionErrors
+} from './utils/messages';
 
 /**
  * Class representing a Form for a Mobx store
@@ -250,12 +254,12 @@ export class FormStore {
     }
 
     if (!this.submitAction) {
-      return Promise.reject(messages.missingSubmitAction);
+      return Promise.reject(missingSubmitAction);
     }
 
     const submitActionLoader = this.submitAction(this.formData);
     if (!(submitActionLoader instanceof Promise)) {
-      return Promise.reject(messages.notPromiseSubmitAction);
+      return Promise.reject(notPromiseSubmitAction);
     }
 
     this.loading = this._processSubmitAction(submitActionLoader);
@@ -293,7 +297,7 @@ export class FormStore {
         return Promise.resolve();
       }
 
-      return Promise.reject(messages.notArrayActionErrors);
+      return Promise.reject(notArrayActionErrors);
     });
   }
 
