@@ -219,7 +219,7 @@ export class FormStore {
    */
   @action reset() {
     this.fieldList.map((field) => field.reset());
-    this.response = false;
+    this.response = null;
     this.loading = false;
     this.resetActionErrors();
   }
@@ -282,7 +282,7 @@ export class FormStore {
       });
     }).catch((e) => {
       runInAction(() => {
-        this.response = {};
+        this.response = null;
       });
 
       if (e instanceof Error) {
