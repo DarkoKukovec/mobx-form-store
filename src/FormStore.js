@@ -283,6 +283,7 @@ export class FormStore {
     }).catch((e) => {
       runInAction(() => {
         this.response = null;
+        this.loading = false;
       });
 
       if (e instanceof Error) {
