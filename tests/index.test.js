@@ -47,7 +47,7 @@ describe('FormStore', function() {
     });
 
     return store.submit().then(() => {
-      expect(store.actionErrors[0].message).to.eq(errors[0].message);
+      expect(store.actionErrors[0].message).to.equal(errors[0].message);
     });
   });
 
@@ -130,8 +130,8 @@ describe('FormStore', function() {
     });
 
     return store.submit().then(() => {
-      expect(store.actionErrors).to.have.lengthOf(1);
-      expect(store.fields.firstName.actionErrors).to.have.lengthOf(1);
+      expect(store.actionErrors[0].message).to.equal('error');
+      expect(store.fields.firstName.actionErrors[0].message).to.equal('error');
     });
   });
 
@@ -161,18 +161,17 @@ describe('FormStore', function() {
         }
       }, serializedStore));
 
-      expect(newStore.actionErrors).to.have.lengthOf(1);
+      expect(newStore.actionErrors[0].message).to.equal('error');
       expect(newStore.fields.firstName.dirty).to.equal(false);
       expect(newStore.fields.firstName.initialValue).to.equal('Dave');
       expect(newStore.fields.lastName.value).to.equal('McDonalds');
       expect(newStore.fields.lastName.initialValue).to.equal('McDonald');
-      expect(newStore.fields.firstName.actionErrors).to.have.lengthOf(1);
+      expect(newStore.fields.firstName.actionErrors[0].message).to.equal('error');
       expect(newStore.fields.firstName.value).to.equal('Dave');
     });
   });
 
   it('should return correct form data', () => {
-    const data = {age: 21};
     const store = new FormStore({
       submitAction: noop,
       fields: {
@@ -181,10 +180,10 @@ describe('FormStore', function() {
       }
     });
 
-    expect(store.formData.age).not.to.equal(data.age);
+    expect(store.formData.age).not.to.equal(21);
 
     store.fields.age.value = 21;
-    expect(store.formData.age).to.equal(data.age);
+    expect(store.formData.age).to.equal(21);
   });
 
   it('should validate correctly', () => {
