@@ -220,4 +220,23 @@ describe('FormStore', function() {
     expect(store.valid).to.equal(true);
     expect(store.errors.password).to.have.lengthOf(0);
   });
+
+  it('should handle response correctly', () => {
+    const store = new FormStore({
+      submitAction: () => Promise.resolve({status: 200}),
+      fields: {
+        firstName: {
+          value: 'Dave'
+        }
+      }
+    });
+
+    expect(store.isSubmitted).to.equal(false);
+    expect(store.response).to.equal(null);
+
+    store.submit().then(() => {
+      expect(store.isSubmitted).to.equal(true);
+      expect(store.response.status).to.equal(200);
+    });
+  });
 });
