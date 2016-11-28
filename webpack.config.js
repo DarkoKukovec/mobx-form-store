@@ -4,9 +4,9 @@ const webpack = require('webpack');
 const DEV = process.env.NODE_ENV !== 'production';
 
 const config = {
-  entry: path.join(__dirname, 'src/FormStore.js'),
+  entry: path.join(__dirname, 'src/index.js'),
   output: {
-    filename: 'FormStore.js',
+    filename: 'index.js',
     path: path.join(__dirname, 'dist'),
     libraryTarget: 'commonjs2'
   },
