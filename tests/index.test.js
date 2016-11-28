@@ -5,6 +5,7 @@ import spies from 'chai-spies';
 
 import {FormStore} from '../src/index';
 import {noop} from '../src/utils/helpers';
+import {progressEnum} from '../src/utils/progressEnum';
 
 chai.use(spies);
 
@@ -237,6 +238,45 @@ describe('FormStore', function() {
     store.submit().then(() => {
       expect(store.isSubmitted).to.equal(true);
       expect(store.response.status).to.equal(200);
+    });
+  });
+
+  it('should have states', () => {
+    const store = new FormStore({
+      submitAction() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            expect(store.progress).to.equal(progressEnum.IN_PROGRESS);
+            resolve();
+          }, 10);
+        });
+      }
+    });
+
+    expect(store.progress).to.equal(progressEnum.NONE);
+    return store.submit().then(() => {
+      expect(store.progress).to.equal(progressEnum.DONE);
+
+      store.reset();
+      expect(store.progress).to.equal(progressEnum.NONE);
+    });
+  });
+
+  it('should have error state', () => {
+    const store = new FormStore({
+      submitAction() {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            expect(store.progress).to.equal(progressEnum.IN_PROGRESS);
+            reject([{message: 'error'}]);
+          }, 10);
+        });
+      }
+    });
+
+    expect(store.progress).to.equal(progressEnum.NONE);
+    return store.submit().then(() => {
+      expect(store.progress).to.equal(progressEnum.ERROR);
     });
   });
 });
