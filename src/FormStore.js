@@ -21,13 +21,13 @@ export class FormStore {
    * Creates an instance of FormStore with an initial state
    *
    * @constructor
-   * @param {Function} [opt.submitAction=noop] - Method to be called when submitting the form
+   * @param {Function} opt.submitAction - Method to be called when submitting the form
    * @param {Object} [opt.validators={}] - Validators for form fields
    * @param {Object} [opt.fields={}] - Fields for the from
    * @param {Object} [opt.response=null] - Response for intial state
    * @param {Object[]} [opt.actionErrors=[]] - Action errors for intial state
    */
-  constructor({submitAction = noop, validators = {}, fields = {}, response = null, actionErrors = []} = {}) {
+  constructor({submitAction, validators = {}, fields = {}, response = null, actionErrors = []} = {}) {
     this.submitAction = submitAction;
     const validatorFunctions = this._initValidators(validators);
 
@@ -250,14 +250,12 @@ export class FormStore {
     }
 
     if (!this.submitAction) {
-      console.warn(messages.missingSubmitAction); // eslint-disable-line no-console
-      return null;
+      return Promise.reject(messages.missingSubmitAction);
     }
 
     const submitActionLoader = this.submitAction(this.formData);
-
-    if (!submitActionLoader instanceof Promise) {
-      throw new Error(messages.notPromiseSubmitAction);
+    if (!(submitActionLoader instanceof Promise)) {
+      return Promise.reject(messages.notPromiseSubmitAction);
     }
 
     this.loading = this._processSubmitAction(submitActionLoader);
@@ -287,14 +285,15 @@ export class FormStore {
       });
 
       if (e instanceof Error) {
-        throw e;
+        return Promise.reject(e);
       }
 
       if (e instanceof Array) {
         this._setAactionErrors(e);
-      } else {
-        throw new Error(messages.notArrayActionErrors);
+        return Promise.resolve();
       }
+
+      return Promise.reject(messages.notArrayActionErrors);
     });
   }
 
