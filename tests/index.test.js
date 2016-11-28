@@ -20,11 +20,9 @@ describe('FormStore', function() {
     const submitActionSpy = chai.spy();
     const store = new FormStore({
       submitAction(formData) {
-        return new Promise((resolve) => {
-          expect(formData).to.not.eq('undefined');
-          submitActionSpy();
-          resolve(formData);
-        });
+        expect(formData).to.not.eq('undefined');
+        submitActionSpy();
+        return Promise.resolve(formData);
       }
     });
     const loader = store.submit();
@@ -43,10 +41,8 @@ describe('FormStore', function() {
     const errors = [{message: 'error'}];
     const store = new FormStore({
       submitAction(formData) {
-        return new Promise((resolve, reject) => {
-          expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
-          reject(errors);
-        });
+        expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
+        return Promise.reject(errors);
       }
     });
 
@@ -128,10 +124,8 @@ describe('FormStore', function() {
         }
       },
       submitAction(formData) {
-        return new Promise((resolve, reject) => {
-          expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
-          reject(errors);
-        });
+        expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
+        return Promise.reject(errors);
       }
     });
 
@@ -153,10 +147,8 @@ describe('FormStore', function() {
         }
       },
       submitAction(formData) {
-        return new Promise((resolve, reject) => {
-          expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
-          reject(errors);
-        });
+        expect(formData).to.not.equal(undefined); // eslint-disable-line no-undefined
+        return Promise.reject(errors);
       }
     });
 
