@@ -9,7 +9,8 @@ import {required, minLength, maxLength, email, equals} from './utils/validators.
 import {
   missingSubmitAction,
   notPromiseSubmitAction,
-  notArrayActionErrors
+  notArrayActionErrors,
+  invalidFormSubmit
 } from './utils/messages';
 
 /**
@@ -258,6 +259,10 @@ export class FormStore {
 
     if (!this.submitAction) {
       return Promise.reject(missingSubmitAction);
+    }
+
+    if (!this.valid) {
+      return Promise.reject(invalidFormSubmit);
     }
 
     const submitActionLoader = this.submitAction(this.formData);
