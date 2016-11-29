@@ -3,7 +3,7 @@
 import chai, {expect} from 'chai';
 import spies from 'chai-spies';
 
-import {FormStore} from '../src/index';
+import {FormStore, FormFieldStore} from '../src/index';
 import {noop} from '../src/utils/helpers';
 import {progressEnum} from '../src/utils/progressEnum';
 import {
@@ -313,61 +313,194 @@ describe('FormStore', function() {
     });
   });
 
-  it('should validate all the built-in validators', () => {
+  it('should validate the required built-in validator', () => {
     const store = new FormStore({
       submitAction: noop,
       fields: {
-        required: {
+        field: {
           value: 'test',
           validators: {
             required: true
-          }
-        },
-        minLength: {
-          value: 'test1',
-          validators: {
-            minLength: 5
-          }
-        },
-        maxLength: {
-          value: 'test',
-          validators: {
-            maxLength: 5
-          }
-        },
-        email: {
-          value: 'test@example.org',
-          validators: {
-            email: true
-          }
-        },
-        equals: {
-          value: 'test@example.org',
-          validators: {
-            equals: 'email'
           }
         }
       }
     });
 
-    expect(store.fields.required.valid).to.equal(true);
-    expect(store.fields.minLength.valid).to.equal(true);
-    expect(store.fields.maxLength.valid).to.equal(true);
-    expect(store.fields.email.valid).to.equal(true);
-    expect(store.fields.equals.valid).to.equal(true);
+    expect(store.fields.field.valid).to.equal(true);
     expect(store.valid).to.equal(true);
 
-    store.fields.required.value = null;
-    store.fields.minLength.value = null;
-    store.fields.maxLength.value = null;
-    store.fields.email.value = null;
-    store.fields.equals.value = '';
+    store.fields.field.value = null;
 
-    expect(store.fields.required.valid).not.to.equal(true);
-    expect(store.fields.minLength.valid).not.to.equal(true);
-    expect(store.fields.maxLength.valid).not.to.equal(true);
-    expect(store.fields.email.valid).not.to.equal(true);
-    expect(store.fields.equals.valid).not.to.equal(true);
+    expect(store.fields.field.valid).not.to.equal(true);
     expect(store.valid).not.to.equal(true);
+  });
+
+  it('should validate the minLength built-in validator', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test',
+          validators: {
+            minLength: 3
+          }
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).not.to.equal(true);
+    expect(store.valid).not.to.equal(true);
+  });
+
+  it('should validate the maxLength built-in validator', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test',
+          validators: {
+            maxLength: 5
+          }
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).not.to.equal(true);
+    expect(store.valid).not.to.equal(true);
+  });
+
+  it('should validate the email built-in validator', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test@example.org',
+          validators: {
+            email: true
+          }
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).not.to.equal(true);
+    expect(store.valid).not.to.equal(true);
+  });
+
+  it('should validate the equals built-in validator', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        example: {
+          value: 'test'
+        },
+        field: {
+          value: 'test',
+          validators: {
+            equals: 'example'
+          }
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).not.to.equal(true);
+    expect(store.valid).not.to.equal(true);
+  });
+
+  it('should supply the context, field, and params to custom validators', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test',
+          validators: {
+            test: 'test'
+          }
+        }
+      },
+      validators: {
+        test(field, opt) {
+          expect(field instanceof FormFieldStore).to.equal(true);
+          expect(opt).to.equal('test');
+          expect(this instanceof FormStore).to.equal(true);
+          return true;
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+  });
+
+  it('should be able to trun off built-in validators', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test@example.org',
+          validators: {
+            email: false
+          }
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+  });
+
+  it('should be able to turn off custom validators', () => {
+    const customValidatorSpy = chai.spy();
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        field: {
+          value: 'test',
+          validators: {
+            test: false
+          }
+        }
+      },
+      validators: {
+        test() {
+          customValidatorSpy();
+          return false;
+        }
+      }
+    });
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.field.value = null;
+
+    expect(store.fields.field.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    expect(customValidatorSpy).to.not.have.been.called();
   });
 });
