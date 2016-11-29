@@ -54,7 +54,7 @@ username.value = 'test@example.org';
 password.value = 'Pa$$w0rd';
 
 store.submit().then((response) => {
-  // response.token :)
+  // e.g. response.token
 });
 ```
 
