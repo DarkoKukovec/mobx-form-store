@@ -53,7 +53,7 @@ export class FormStore {
    * @return {Object} Combined validators
    */
   _initValidators(validators) {
-    const predefinedValidatorFunctions = {
+    const validatorFunctions = {
       required: required.bind(this),
       minLength: minLength.bind(this),
       maxLength: maxLength.bind(this),
@@ -61,7 +61,10 @@ export class FormStore {
       equals: equals.bind(this)
     };
 
-    return Object.assign(predefinedValidatorFunctions, validators);
+    Object.keys(validators)
+      .map((key) => (validatorFunctions[key] = validators[key].bind(this)));
+
+    return validatorFunctions;
   }
 
   /**
