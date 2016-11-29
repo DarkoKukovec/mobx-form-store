@@ -57,12 +57,11 @@ export function maxLength(field, length) {
  * @return {Boolean} Field value is a valid email
  */
 export function email(field) {
-  return !field.value || EMAIL.test(field.value);
+  return EMAIL.test(field.value);
 }
 
 /**
  * Check if the field values match
- * FIXME, REVIEW
  *
  * @public
  * @method
@@ -72,5 +71,5 @@ export function email(field) {
  * @return {Boolean} Field value matches the fieldName field value
  */
 export function equals(field, fieldName) {
-  return field.value === self[fieldName].value;
+  return field.value === this.fields[fieldName].value;
 }
