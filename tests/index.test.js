@@ -9,7 +9,8 @@ import {progressEnum} from '../src/utils/progressEnum';
 import {
   missingSubmitAction,
   notPromiseSubmitAction,
-  notArrayActionErrors
+  notArrayActionErrors,
+  invalidFormSubmit
 } from '../src/utils/messages';
 
 chai.use(spies);
@@ -532,6 +533,25 @@ describe('FormStore', function() {
 
     store.submit().catch((e) => {
       expect(e.message).to.equal('additionalNumber is not defined');
+    });
+  });
+
+  it('should handle submit of invalid form', () => {
+    const store = new FormStore({
+      submitAction() {
+        return Promise.resolve();
+      },
+      fields: {
+        name: {
+          validators: {
+            required: true
+          }
+        }
+      }
+    });
+
+    store.submit().catch((e) => {
+      expect(e).to.equal(invalidFormSubmit);
     });
   });
 });
