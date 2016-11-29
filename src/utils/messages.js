@@ -11,3 +11,6 @@ export const notPromiseSubmitAction = `${prefix} submitAction has to be a promis
 
 /** @exports Message for action errors not being an array */
 export const notArrayActionErrors = `${prefix} action errors rejected from submitAction need to be in an array. Read through the documentation ${docs}/test for examles and information about this.`;
+
+/** @exports Message for invalid form submit */
+export const invalidFormSubmit = `${prefix} submitting of an invalid form is not yet supported.  Read through the documentation ${docs}/test for examles and information about this.`;
