@@ -9,7 +9,10 @@ const config = {
   module: {
     loaders: [{
       test: /.js$/,
-      loader: 'babel'
+      loader: 'babel',
+      query: {
+        plugins: ['istanbul']
+      }
     }]
   },
   plugins: [],
