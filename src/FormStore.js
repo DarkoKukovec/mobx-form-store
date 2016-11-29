@@ -171,7 +171,9 @@ export class FormStore {
    * @return {Object[]} List of fields
    */
   @computed get fieldList() {
-    return Object.values(this.fields);
+
+    // This is equal to Object.values but has better support
+    return Object.keys(this.fields).map((name) => this.fields[name]);
   }
 
   /**
