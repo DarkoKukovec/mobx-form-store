@@ -312,4 +312,62 @@ describe('FormStore', function() {
       expect(e).to.equal(notArrayActionErrors);
     });
   });
+
+  it('should validate all the built-in validators', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        required: {
+          value: 'test',
+          validators: {
+            required: true
+          }
+        },
+        minLength: {
+          value: 'test1',
+          validators: {
+            minLength: 5
+          }
+        },
+        maxLength: {
+          value: 'test',
+          validators: {
+            maxLength: 5
+          }
+        },
+        email: {
+          value: 'test@example.org',
+          validators: {
+            email: true
+          }
+        },
+        equals: {
+          value: 'test@example.org',
+          validators: {
+            equals: 'email'
+          }
+        }
+      }
+    });
+
+    expect(store.fields.required.valid).to.equal(true);
+    expect(store.fields.minLength.valid).to.equal(true);
+    expect(store.fields.maxLength.valid).to.equal(true);
+    expect(store.fields.email.valid).to.equal(true);
+    expect(store.fields.equals.valid).to.equal(true);
+    expect(store.valid).to.equal(true);
+
+    store.fields.required.value = null;
+    store.fields.minLength.value = null;
+    store.fields.maxLength.value = null;
+    store.fields.email.value = null;
+    store.fields.equals.value = '';
+
+    expect(store.fields.required.valid).not.to.equal(true);
+    expect(store.fields.minLength.valid).not.to.equal(true);
+    expect(store.fields.maxLength.valid).not.to.equal(true);
+    expect(store.fields.email.valid).not.to.equal(true);
+    expect(store.fields.equals.valid).not.to.equal(true);
+    expect(store.valid).not.to.equal(true);
+  });
 });
