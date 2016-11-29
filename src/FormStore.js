@@ -54,11 +54,11 @@ export class FormStore {
    */
   _initValidators(validators) {
     const predefinedValidatorFunctions = {
-      required,
-      minLength,
-      maxLength,
-      email,
-      equals
+      required: required.bind(this),
+      minLength: minLength.bind(this),
+      maxLength: maxLength.bind(this),
+      email: email.bind(this),
+      equals: equals.bind(this)
     };
 
     return Object.assign(predefinedValidatorFunctions, validators);
