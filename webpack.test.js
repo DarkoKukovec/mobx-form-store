@@ -1,7 +1,7 @@
 const path = require('path');
 
 const config = {
-  entry: path.join(__dirname, 'tests/FormStore.test.js'),
+  entry: path.join(__dirname, 'tests/index.test.js'),
   output: {
     filename: 'test.js',
     path: path.join(__dirname, 'dist')
@@ -9,7 +9,10 @@ const config = {
   module: {
     loaders: [{
       test: /.js$/,
-      loader: 'babel'
+      loader: 'babel',
+      query: {
+        plugins: ['istanbul']
+      }
     }]
   },
   plugins: [],
