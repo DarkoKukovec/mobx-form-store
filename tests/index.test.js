@@ -181,8 +181,7 @@ describe('FormStore', function() {
     const store = new FormStore({
       submitAction: noop,
       fields: {
-        age: {
-        }
+        age: undefined // eslint-disable-line no-undefined
       }
     });
 
@@ -502,5 +501,37 @@ describe('FormStore', function() {
     expect(store.valid).to.equal(true);
 
     expect(customValidatorSpy).to.not.have.been.called();
+  });
+
+  it('should mark form as dirty', () => {
+    const store = new FormStore({
+      submitAction: noop,
+      fields: {
+        name: {
+          value: 'Dave'
+        }
+      }
+    });
+
+    expect(store.dirty).not.to.equal(true);
+
+    store.fields.name.value = 'John';
+    expect(store.dirty).to.equal(true);
+  });
+
+  it('should handle submitAction runtime errors', () => {
+    const store = new FormStore({
+      submitAction() {
+        return new Promise((resolve) => {
+          const number = 3.141 + additionalNumber; // eslint-disable-line no-undef
+
+          return resolve(number);
+        });
+      }
+    });
+
+    store.submit().catch((e) => {
+      expect(e.message).to.equal('additionalNumber is not defined');
+    });
   });
 });
