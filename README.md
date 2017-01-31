@@ -4,10 +4,10 @@
 [![Dependency Status](https://david-dm.org/DarkoKukovec/mobx-form-store.svg)](https://david-dm.org/DarkoKukovec/mobx-form-store)
 [![devDependency Status](https://david-dm.org/DarkoKukovec/mobx-form-store/dev-status.svg)](https://david-dm.org/DarkoKukovec/mobx-form-store#info=devDependencies)
 
-This is an opnionated way to simplify working with froms and Mobx. 
-It provides a straight forward API for keeping states, 
-validating user inputs, and handeling API errors. It's important to note
-this can be used with React but also anywhere else wher you can use Mobx.
+This is an opinionated way to simplify working with forms and Mobx. 
+It provides a straightforward API for keeping states, 
+validating user inputs, and handling API errors. It's important to note
+this can be used with React but also anywhere else where you can use Mobx.
 
 ## Example
 
